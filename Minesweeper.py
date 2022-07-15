@@ -1,6 +1,8 @@
+import sys
 from tkinter import *
 from functools import partial
 import numpy as np 
+import time  
 
 class Minesweeper:
 
@@ -84,41 +86,66 @@ class Minesweeper:
      
         return self.board    
     # Class to create the board
-    class MainFrame(Frame):
-        coordinates = 0
+class MainFrame(Frame):
+    i = 0
+    new_game = Minesweeper()
+    new_game.bombs_place()
+    matrix = new_game.board_creation()
+    print(matrix)
+
+    coordinates = 0
     # define the class
-        def __init__(self, parent):
-            super().__init__()
+    def __init__(self, parent):
+        super().__init__()
             # Creates a loop and creates every button 
-            for row in range(0, 5): 
-                for column in range(0, 5):
-                    new_button = Button(self, width= 5, height= 3, text="")
-                    new_button.grid( row=row, column=column, sticky=N+S+E+W )
-                    new_button["command"] = partial(self.press, new_button, row, column) # uses the partial to use the coordinates in the press function
+        for row in range(0, 5): 
+            for column in range(0, 5):
+                new_button = Button(self, width= 5, height= 3, text="")
+                new_button.grid( row=row, column=column, sticky=N+S+E+W )
+                new_button["command"] = partial(self.press, new_button, row, column) # uses the partial to use the coordinates in the press function
 
         # This function gives the button their functionality
-        def press(self, btn, row, col):
+    def press(self, btn, row, col, matrix = matrix, i=i):
+        
+
+    
+        if i == 0:
+        
             coordinates = (row, col)
             print(coordinates)
-            btn.configure(bg="grey", text="hola")
-            btn.configure(activebackground="grey")
+            value = matrix[coordinates[0]][coordinates[-1]]
+            if value <= 0:
+                btn.configure(bg="grey", text= value)
+                btn.configure(activebackground="grey")
+            if value == 1:
+                btn.configure(bg="green", text= value)
+                btn.configure(activebackground="grey")
+            elif value == 2:
+                btn.configure(bg="blue", text= value)
+                btn.configure(activebackground="grey")
+            elif value == 3 :
+                btn.configure(bg="cadetblue", text= value)
+                btn.configure(activebackground="grey")        
+            elif value == 10:
+                btn.configure(bg="red", text= "bomb")
+                btn.configure(activebackground="red")
+                
+                time.sleep(1)
+                sys.exit()
+                
+            
 
-   
+           
 
-    if __name__ == "__main__":
-        root = Tk()
-        root.title("Minesweeper")
-        root.resizable(True, True)
-        MainFrame(root).pack(side="top", fill="both", expand=True)
-        root.mainloop()
-
-
+if __name__ == "__main__":
+    root = Tk()
+    root.title("Minesweeper")
+    root.resizable(True, True)
+    MainFrame(root).pack(side="top", fill="both", expand=True)
+    root.mainloop()
 
 
 
-new_game = Minesweeper()
-print(new_game.bombs_place())
-print(new_game.board_creation())
 
 
 
